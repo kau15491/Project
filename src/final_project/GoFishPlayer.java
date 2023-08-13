@@ -7,7 +7,7 @@ package final_project;
 
 /**
  *
- * @author Prabhpreet Kaur,2023
+ * @author Karan Kaushal,2023
  */
 
 import java.util.ArrayList;
