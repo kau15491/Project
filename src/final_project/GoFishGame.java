@@ -107,7 +107,7 @@ public class GoFishGame extends Game {
         player.hand.removeAll(pairs);
         addToPile(pairs);
 
-        return pairs.size() > 0;
+        return !pairs.isEmpty();
     }
 
     @Override
