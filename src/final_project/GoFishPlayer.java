@@ -76,8 +76,7 @@ class GoFishPlayer extends Player {
 
     @Override
     public void play() {
-        // The Go Fish player logic will be implemented here.
-        // In the basic version, we'll let the player ask for a specific rank.
+        
     }
 }
 
