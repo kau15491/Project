@@ -166,8 +166,8 @@ public class GoFishGame extends Game {
     }
 
     @Override
-public void declareWinner() {
-    // Determine and display the winner based on the number of pairs collected
+    public void declareWinner() {
+    // Determine and display the winner(s) based on the number of pairs collected
     ArrayList<GoFishPlayer> players = getPlayers();
     int maxPairs = 0;
     ArrayList<GoFishPlayer> winners = new ArrayList<>();
@@ -184,10 +184,18 @@ public void declareWinner() {
         }
     }
 
-    if (winners.size() == 1) {
-        System.out.println("The winner is " + winners.get(0).getName() + "!");
+    if (!winners.isEmpty()) {
+        if (winners.size() == 1) {
+            System.out.println("The winner is " + winners.get(0).getName() + "!");
+        } else {
+            System.out.print("It's a tie between ");
+            for (int i = 0; i < winners.size() - 1; i++) {
+                System.out.print(winners.get(i).getName() + ", ");
+            }
+            System.out.println("and " + winners.get(winners.size() - 1).getName() + "!");
+        }
     } else {
-        System.out.println("It's a tie! No winner.");
+        System.out.println("No winners.");
     }
 }
 }
