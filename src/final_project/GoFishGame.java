@@ -112,58 +112,71 @@ public class GoFishGame extends Game {
 
     @Override
     public void play() {
-        // Initialize the game
-        ArrayList<GoFishPlayer> players = getPlayers();
-        int numPlayers = players.size();
-        int numCardsToDeal = 5;
-        int maxTurns = 5;
-        int currentTurn = 0;
+    // Initialize the game
+    ArrayList<GoFishPlayer> players = getPlayers();
+    int numPlayers = players.size();
+    int numCardsToDeal = 5;
 
-        shuffleDeck();
-        dealCards(players, numCardsToDeal);
+    shuffleDeck();
+    dealCards(players, numCardsToDeal);
 
-        // Start the game loop
-        int currentPlayerIndex = 0;
-        boolean gameOver = false;
-        try (Scanner scanner = new Scanner(System.in)) {
-            while (!gameOver && currentTurn < maxTurns) {
-                GoFishPlayer currentPlayer = players.get(currentPlayerIndex);
-                
-                currentPlayer.showHand();
-                
-                // Ask the current player for a card rank or option to stop
-                System.out.print(currentPlayer.getName() + ", ask for a card rank (or enter 'stop' to stop the game): ");
-                String input = scanner.nextLine();
-                
-                if ("stop".equalsIgnoreCase(input)) {
-                    System.out.println("Game stopped by user.");
-                    break;
-                }
-                
-                // Continue with the game logic for asking for cards, drawing, and checking pairs
-                boolean foundPair = checkForPairs(currentPlayer);
-                
-                if (foundPair) {
-                    System.out.println("You found a pair! Your turn continues.");
-                } else {
-                    System.out.print("Go Fish! Drawing a card... ");
-                    drawCard(currentPlayer);
-                    foundPair = checkForPairs(currentPlayer);
-                }
-                
-                if (deck.getCards().isEmpty() && currentPlayer.hand.isEmpty()) {
-                    gameOver = true;
-                }
-                
-                if (!foundPair) {
-                    currentPlayerIndex = (currentPlayerIndex + 1) % numPlayers;
-                    currentTurn++;
-                }
-            }
-            
-            declareWinner();
+    // Start the game loop
+    int currentPlayerIndex = 0;
+    boolean gameOver = false;
+    int turnCounter = 0;
+    
+    while (!gameOver && turnCounter < 7) { // Limiting the game to 7 turns
+        GoFishPlayer currentPlayer = players.get(currentPlayerIndex);
+
+        currentPlayer.showHand();
+        Scanner scanner = new Scanner(System.in);
+        System.out.print(currentPlayer.getName() + ", ask for a card rank (or enter 'stop' to stop the game): ");
+        String rank = scanner.nextLine();
+
+        if (rank.equalsIgnoreCase("stop")) {
+            System.out.println("Game stopped by user.");
+            break;
+        }
+
+        if (!isValidRank(rank)) {
+            System.out.println("Invalid card rank. Please enter a valid card rank from the deck.");
+            continue;
+        }
+
+        boolean foundPair = checkForPairs(currentPlayer);
+
+        if (foundPair) {
+            System.out.println("You found a pair! Your turn continues.");
+        } else {
+            System.out.println("Go Fish! Drawing a card...");
+            drawCard(currentPlayer);
+            foundPair = checkForPairs(currentPlayer);
+        }
+
+        if (deck.getCards().isEmpty() && currentPlayer.hand.isEmpty()) {
+            gameOver = true;
+        }
+
+        if (!foundPair) {
+            currentPlayerIndex = (currentPlayerIndex + 1) % numPlayers;
+        }
+        
+        turnCounter++;
+    }
+
+    declareWinner();
+}
+
+    // Helper method to check if the entered rank is valid
+    private boolean isValidRank(String rank) {
+    String[] validRanks = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"};
+    for (String validRank : validRanks) {
+        if (validRank.equalsIgnoreCase(rank)) {
+            return true;
         }
     }
+    return false;
+}
 
     @Override
     public void declareWinner() {
